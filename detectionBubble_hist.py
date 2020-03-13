@@ -28,11 +28,14 @@ kernel = np.ones((3, 3), np.uint8)
 
 # 画像の読み込み
 arg = sys.argv
+print(len(arg))
 if len(arg) < 2:
-    filename = "images/bubble-1.jpg"
-elif len(arg) == 2:
-    number = arg[1]
-    filename = "images/bubble-{}.jpg".format(number)
+  filename = "images/bubble-1.jpg"
+elif len(arg) >= 2:
+  number = arg[1]
+  filename = "images/bubble-{}.jpg".format(number)
+  inputLabel = int(arg[2])
+
 
 
 # filename = "images/bubble-1.jpg"
@@ -41,7 +44,7 @@ cv2.imshow('src', img)
 
 # グレースケール化
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-cv2.imshow('orig', gray)
+# cv2.imshow('orig', gray)
 
 # ガウシアンフィルタ
 gray = cv2.GaussianBlur(gray, (3, 3), 0)
@@ -53,7 +56,7 @@ ret, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 #ret, gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
 print(ret)
 
-cv2.imshow("binary", binary)
+# cv2.imshow("binary", binary)
 
 
 # カーネル
@@ -79,8 +82,8 @@ for y in range(img.shape[0]):
         else:
             reverseBinary[y][x] = 0
 
-cv2.imshow("reverseBinary", reverseBinary)
-cv2.waitKey(0)
+# cv2.imshow("reverseBinary", reverseBinary)
+# cv2.waitKey(0)
 
 # cv2.imshow("Src", img)
 # cv2.imshow("Otsu", binary)
@@ -254,14 +257,14 @@ image, contours, hierarchy = cv2.findContours(
     result, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
 
 
-cv2.imshow("labelingBubble", labelingBubble)
-cv2.imshow("labelingBubblePainted", labelingBubblePainted)
-cv2.imshow("paintCenterWhiteRegion", paintCenterWhiteRegion)
-cv2.imshow("bubbleHasWhiteRegion", bubbleHasWhiteRegion)
+# cv2.imshow("labelingBubble", labelingBubble)
+# cv2.imshow("labelingBubblePainted", labelingBubblePainted)
+# cv2.imshow("paintCenterWhiteRegion", paintCenterWhiteRegion)
+# cv2.imshow("bubbleHasWhiteRegion", bubbleHasWhiteRegion)
 # 色付き
-cv2.imshow("bubbleHasWhiteRegion2", bubbleHasWhiteRegion2)
-cv2.imshow("result", result)
-cv2.imshow("detectionWhiteRegion", detectionWhiteRegion)
+# cv2.imshow("bubbleHasWhiteRegion2", bubbleHasWhiteRegion2)
+# cv2.imshow("result", result)
+# cv2.imshow("detectionWhiteRegion", detectionWhiteRegion)
 
 
 print(contours[0][0][0])
@@ -553,12 +556,14 @@ for i in range(len(saveCenterWhiteLabels)):
 
 
 # グラフの表示
-# for i in range(len(accumulationByOnePoints[inputLabel])):
-#   left = np.array(range(0,100))
-#   height = accumulationByOnePoints[inputLabel][i][0]
-#   plt.bar(left, height)
-#   plt.title("Center({},{}), max={}, r={}".format(accumulationByOnePoints[inputLabel][i][1], accumulationByOnePoints[inputLabel][i][2], np.max(accumulationByOnePoints[inputLabel][i][0]), accumulationByOnePoints[inputLabel][i][0].index(np.max(accumulationByOnePoints[inputLabel][i][0]))))
-#   plt.show()
+
+
+for i in range(len(accumulationByOnePoints[inputLabel])):
+  left = np.array(range(0,40))
+  height = accumulationByOnePoints[inputLabel][i][0][0:40]
+  plt.bar(left, height)
+  plt.title("Center({},{}), max={}, r={}".format(accumulationByOnePoints[inputLabel][i][1], accumulationByOnePoints[inputLabel][i][2], np.max(accumulationByOnePoints[inputLabel][i][0]), accumulationByOnePoints[inputLabel][i][0].index(np.max(accumulationByOnePoints[inputLabel][i][0]))))
+  plt.show()
 
 
 # args = sys.argv
@@ -625,16 +630,9 @@ for i in range(len(saveCenterWhiteLabels)):
 #   cv2.circle(detectCircle, (int(center[0]), int(center[1])), int(radius), (0,0,255), thickness=1, lineType=cv2.LINE_8, shift=0)
 
 
-cv2.imshow("detectionWhiteRegion3", detectionWhiteRegion3)
-cv2.imshow("輪郭画像", countourImg)
-
-detectionWhiteRegion = cv2.cvtColor(detectionWhiteRegion, cv2.COLOR_BGR2GRAY)
-
-CenterRegionAndCountour = detectionWhiteRegion + countourImg
-cv2.imshow("Countour+CenterRegion", CenterRegionAndCountour)
-
-
-cv2.imshow('outerLabeled', outerLabeled)  # バブル外形にラベリングしたもの
+# cv2.imshow("detectionWhiteRegion3", detectionWhiteRegion3)
+# cv2.imshow("輪郭画像", countourImg)
+# cv2.imshow('outerLabeled', outerLabeled)  # バブル外形にラベリングしたもの
 
 # cv2.imshow('labelNumber_2Img', labelNumber_2Img)  # バブル外形にラベリングしたもの
 
@@ -645,9 +643,9 @@ cv2.imshow('outerLabeled', outerLabeled)  # バブル外形にラベリングし
 
 
 # print(hierarchy)
-cv2.imshow("detectionBubble", img)
+# cv2.imshow("detectionBubble", img)
 
 
-cv2.waitKey(0)
+# cv2.waitKey(0)
 
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
